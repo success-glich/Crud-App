@@ -11,20 +11,28 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "./ui/button";
+import { Trash2 } from "lucide-react";
+import { useAppDispatch } from "@/app/hooks";
+import { deleteUser } from "@/app/userSlice";
+import { useToast } from "./ui/use-toast";
 
-function UserDeleteBtn({ id }: { id: number }) {
-  const navigate = useNavigate();
-  const deleteUser = () => {
-    //dispatch user delete from store
-    //if it successfully dispatch show toast success fully delete
-    alert("delet succesfully");
+function UserDeleteBtn({ id }: { id: string }) {
+  // const navigate = useNavigate();
+  const { toast } = useToast();
+  const dispatch = useAppDispatch();
+  const handleDeleteUser = () => {
+    dispatch(deleteUser(id));
+    toast({ title: "User Deleted Successfully!", className: "bg-red-400" });
   };
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">
-          <img src="./trash.svg" className="text-white  w-5" />
-        </Button>
+        {/* <Button variant="destructive"> */}
+        <Trash2
+          size={20}
+          className="text-red-500 hover:scale-125 cursor-pointer transition-all"
+        />
+        {/* </Button> */}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -35,7 +43,7 @@ function UserDeleteBtn({ id }: { id: number }) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction className="bg-red-500" onClick={deleteUser}>
+          <AlertDialogAction className="bg-red-500" onClick={handleDeleteUser}>
             Yes, delete it
           </AlertDialogAction>
         </AlertDialogFooter>

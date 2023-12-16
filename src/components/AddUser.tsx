@@ -1,11 +1,10 @@
 import { ChangeEvent, useState } from "react";
 import { Button } from "./ui/button";
-import UserDeleteBtn from "./UserDeleteBtn";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-// import DatePicker from "./DatePicker";
+import { useToast } from "@/components/ui/use-toast";
 
-import { userErrorType } from "@/type";
+import { IUser, userErrorType } from "@/type";
 import {
   generateUniqueId,
   getCurrentDate,
@@ -16,21 +15,12 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { addUser } from "@/app/userSlice";
 import SelectInput from "./SelectInput";
 
-interface IUser {
-  id: string;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  dob: string;
-  address: {
-    city: string;
-    district: string;
-    province: string;
-    country: string;
-  };
-}
-
-const provinceOptions = [
+export const countryOptions = [
+  { value: "Nepal", label: "Nepal" },
+  { value: "Australia", label: "Australia" },
+  { value: "Other", label: "Other" },
+];
+export const provinceOptions = [
   { value: "1", label: "Province 1" },
   { value: "2", label: "Province 2" },
   { value: "3", label: "Province 3" },
@@ -39,12 +29,8 @@ const provinceOptions = [
   { value: "6", label: "Province 6" },
   { value: "7", label: "Province 7" },
 ];
-const countryOptions = [
-  { value: "Nepal", label: "Nepal" },
-  { value: "Australia", label: "Australia" },
-  { value: "Other", label: "Other" },
-];
-const initialState = {
+
+export const initialState = {
   id: "",
   name: "",
   email: "",
@@ -59,6 +45,7 @@ const initialState = {
 };
 
 export default function AddUser() {
+  const { toast } = useToast();
   const [formData, setFormData] = useState<IUser>(initialState);
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<userErrorType>({});
@@ -114,13 +101,15 @@ export default function AddUser() {
       setLoading(false);
       return;
     }
-    setErrors({});
-
     dispatch(addUser({ ...formData, id: generateUniqueId() }));
+    toast({ title: "User Added Successfully!", className: "bg-green-400" });
+    clear();
   };
   const clear = () => {
+    console.log("Clear function called");
     setErrors({});
-    setFormData(initialState);
+    setFormData((_) => initialState);
+    setLoading(false);
   };
 
   return (
@@ -131,16 +120,28 @@ export default function AddUser() {
       <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3  p-4    ">
         <div className="mt-4  ml-4  md:ml-4 md:col-span-2 lg:col-span-3 w-full">
           <Label htmlFor="name">
-            Name <span className="text-red-500 font-bold text-sm"></span>
+            Name <span className="text-red-500 font-bold text-sm">*</span>
           </Label>
-          <Input type="text" name="name" id="name" onChange={handleChange} />
+          <Input
+            type="text"
+            name="name"
+            id="name"
+            value={formData.name}
+            onChange={handleChange}
+          />
           <span className="text-red-500 font-bold text-sm">{errors?.name}</span>
         </div>
         <div className="mt-4 ml-4 ">
           <Label htmlFor="email">
             Email <span className="text-red-500 font-bold text-sm">*</span>
           </Label>
-          <Input type="text" name="email" id="email" onChange={handleChange} />
+          <Input
+            type="text"
+            name="email"
+            id="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
           <span className="text-red-500 font-bold text-sm">
             {errors?.email}
           </span>
@@ -154,6 +155,7 @@ export default function AddUser() {
             type="text"
             name="phoneNumber"
             id="phoneNumber"
+            value={formData.phoneNumber}
             onChange={handleChange}
           />
           <span className="text-red-500 font-bold text-sm">
@@ -167,6 +169,7 @@ export default function AddUser() {
               type="date"
               name="dob"
               id="dob"
+              value={formData.dob}
               max={getCurrentDate()}
               onChange={handleChange}
             />
@@ -178,13 +181,12 @@ export default function AddUser() {
           <Input
             type="text"
             name="city"
+            value={formData.address.city}
             id="city"
             placeholder="Eg: Kathmandu"
             onChange={handleChange}
           />
-          <span className="text-red-500 font-bold text-sm">
-            {"* Email field is required"}
-          </span>
+          <span className="text-red-500 font-bold text-sm"></span>
         </div>
         <div className="mt-4 ml-4 ">
           <Label htmlFor="district">District</Label>
@@ -192,6 +194,7 @@ export default function AddUser() {
             type="text"
             name="district"
             id="district"
+            value={formData.address.district}
             placeholder="Ex. Laliptur"
             onChange={handleChange}
           />
