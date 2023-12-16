@@ -8,13 +8,17 @@ interface UserState {
   userList: IUser[];
 }
 const initialState: UserState = {
-  userList: [],
+  userList: JSON.parse(localStorage.getItem("userList")!) || [],
 };
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    addUser: (state, action: PayloadAction<IUser>) => {},
+    addUser: (state, action: PayloadAction<IUser>) => {
+      state.userList.push(action.payload);
+      console.log(state.userList);
+      localStorage.setItem("userList", JSON.stringify(state.userList));
+    },
     editUser: (
       state,
       action: PayloadAction<{ id: string; updatedUser: IUser }>
@@ -22,11 +26,6 @@ export const userSlice = createSlice({
     deleteUser: (state, action: PayloadAction<string>) => {},
   },
 });
-
-// * Function to generate unique ids
-const generateUniqueId = (): string => {
-  return "_" + Math.random().toString(36).slice(2, 9);
-};
 
 export const { addUser, editUser, deleteUser } = userSlice.actions;
 

@@ -11,3 +11,9 @@ export interface IUser {
     country: string;
   };
 }
+
+export type userErrorType = {
+  name?: string;
+  email?: string;
+  phoneNumber?: string;
+};
