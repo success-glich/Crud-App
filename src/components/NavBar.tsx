@@ -1,22 +1,36 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
-import { isPending } from "@reduxjs/toolkit";
 
 function NavBar() {
-  const isActive = ({ isActive }: { isActive: boolean }) =>
-    isActive ? "bg-orange-500" : "";
+  const location = useLocation();
+  const pathName = location.pathname;
+
   return (
     <div className="h-16 w-full flex justify-between items-center px-6">
       <div className="flex  justify-center items-center">
-        <img src="./images/logo.svg" className="w-10 h-52" />
-        <h1 className="text-2xl font-bold">Logo</h1>
+        <img src="./images/logo.jpg" className="w-12 h-12" />
+        <h1 className="ml-2 text-2xl font-bold">Treeleaf Ai</h1>
       </div>
       <div>
-        <NavLink to="/" className={isActive}>
-          <Button variant={"link"}>Home</Button>
+        <NavLink to="/">
+          <Button
+            variant={"link"}
+            className={`text-md  lg:text-lg ${
+              pathName === "/" ? "font-bold text-orange-500" : ""
+            }`}
+          >
+            Home
+          </Button>
         </NavLink>
-        <NavLink to="/profile" className={isActive}>
-          <Button variant={"link"}>Profile</Button>
+        <NavLink to="/profile">
+          <Button
+            variant={"link"}
+            className={`text-md  lg:text-lg ${
+              pathName === "/profile" ? "font-bold text-orange-500" : ""
+            }`}
+          >
+            Profile
+          </Button>
         </NavLink>
       </div>
     </div>
