@@ -217,7 +217,7 @@ export default function AddUser() {
             selectedValue={formData.address.country}
           />
         </div>
-        <div className="mt-4 flex gap-2 md:col-span-2 justify-items-center w-full ">
+        <div className="mt-4 flex gap-2 md:col-span-2 lg:col-span-3 justify-items-center w-full ">
           <Button
             variant="default"
             onClick={submit}
