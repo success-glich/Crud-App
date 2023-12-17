@@ -27,7 +27,7 @@ const Home: React.FC = () => {
             <DataTable data={userList} columns={columns} />
           </div>
 
-          <div className=" border-l-orange-300 border-l-4 rounded-md hover:bg-[#1a2233]">
+          <div className=" mb-5 border-l-orange-300 border-l-4 rounded-md hover:bg-[#1a2233]">
             <Link to="/profile">
               {/* <span></span>
                */}
