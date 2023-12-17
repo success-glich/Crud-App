@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,14 +9,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "./ui/button";
 import { Trash2 } from "lucide-react";
 import { useAppDispatch } from "@/app/hooks";
 import { deleteUser } from "@/app/userSlice";
 import { useToast } from "./ui/use-toast";
 
 function UserDeleteBtn({ id }: { id: string }) {
-  // const navigate = useNavigate();
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   const handleDeleteUser = () => {
@@ -27,12 +24,10 @@ function UserDeleteBtn({ id }: { id: string }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        {/* <Button variant="destructive"> */}
         <Trash2
           size={20}
           className="text-red-500 hover:scale-125 cursor-pointer transition-all"
         />
-        {/* </Button> */}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

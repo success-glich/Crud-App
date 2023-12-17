@@ -4,7 +4,7 @@ import App from "./App.tsx";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Home from "./pages/Home/Home.tsx";
-import Profile from "./pages/Profile.tsx";
+import Profile from "./pages/Profile/Profile.tsx";
 import { store } from "./app/store.ts";
 import { Provider } from "react-redux";
 import { Toaster } from "@/components/ui/toaster";

@@ -11,7 +11,7 @@ import {
   validateEmail,
   validatePhone,
 } from "@/lib/utils";
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { useAppDispatch } from "@/app/hooks";
 import { addUser } from "@/app/userSlice";
 import SelectInput from "./SelectInput";
 
@@ -55,27 +55,15 @@ export default function AddUser() {
   ) => {
     const { name, value } = e.target;
 
-    if (
-      name === "city" ||
-      name === "district" ||
-      name === "province" ||
-      name == "country"
-    ) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        address: {
-          ...prevFormData.address,
-          [name]: value,
-        },
-      }));
-    } else {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+      address: {
+        ...prevFormData.address,
         [name]: value,
-      }));
-    }
+      },
+    }));
   };
-  console.log("user Data", formData);
 
   const submit = () => {
     setLoading(true);
@@ -106,7 +94,6 @@ export default function AddUser() {
     clear();
   };
   const clear = () => {
-    console.log("Clear function called");
     setErrors({});
     setFormData((_) => initialState);
     setLoading(false);

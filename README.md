@@ -18,7 +18,7 @@ This is a React JS application that allows users to enter and manage profiles.
 ## Usage
 
 - Run the application using `npm start` or `yarn start`
-- Open your browser and go to [http://localhost:5173/]()
+- Open your browser and go to [http://localhost:5173/]
 
 
 ## Dependencies
@@ -29,4 +29,4 @@ This is a React JS application that allows users to enter and manage profiles.
 
 ## License
 
-This project is licensed under the MIT License - 
+This project is licensed under the MIT License.

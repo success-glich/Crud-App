@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -11,14 +11,14 @@ import {
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-
-// import { useToast } from "@/components/ui/use-toast";
 import { IUser, userErrorType } from "@/type";
-import { useNavigate } from "react-router-dom";
 import SelectInput from "./SelectInput";
 import { countryOptions, provinceOptions } from "./AddUser";
-import { getCurrentDate } from "@/lib/utils";
+import { getCurrentDate, validateEmail, validatePhone } from "@/lib/utils";
 import { Edit2 } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { editUser } from "@/app/userSlice";
+import { useToast } from "./ui/use-toast";
 
 export default function EditUser({ user }: { user: IUser }) {
   const userState = {
@@ -35,9 +35,8 @@ export default function EditUser({ user }: { user: IUser }) {
     },
   };
   const [formData, setFormData] = useState<IUser>(userState);
-  console.log(user);
-  const navigate = useNavigate();
-  // const { toast } = useToast();
+  const dispatch = useDispatch();
+  const { toast } = useToast();
   const [sheetOpen, setSheetOpen] = useState<boolean>(false);
   const toggleSheet = () => setSheetOpen(!sheetOpen);
   const handleChange = (
@@ -52,38 +51,66 @@ export default function EditUser({ user }: { user: IUser }) {
         [name]: value,
       },
     }));
-    // if (
-    //   name === "city" ||
-    //   name === "district" ||
-    //   name === "province" ||
-    //   name == "country"
-    // ) {
-    //   setFormData((prevFormData) => ({
-    //     ...prevFormData,
-    //     address: {
-    //       ...prevFormData.address,
-    //       [name]: value,
-    //     },
-    //   }));
-    // } else {
-    //   setFormData((prevFormData) => ({
-    //     ...prevFormData,
-    //     [name]: value,
-    //   }));
-    // }
   };
 
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<userErrorType>({});
 
-  const submit = () => {};
+  const submit = () => {
+    setLoading(true);
+    const errRecords: Record<string, string> = {};
+    setErrors({});
+    if (!formData.name.trim()) {
+      errRecords.name = "* Name is required";
+    }
+    if (!formData.email.trim()) {
+      errRecords.email = "* Email is required";
+    } else if (!validateEmail(formData.email)) {
+      errRecords.email = "* Invalid email format";
+    }
+    if (!formData.phoneNumber.trim()) {
+      errRecords.phoneNumber = "* Phone Number is required";
+    } else if (!validatePhone(formData.phoneNumber)) {
+      errRecords.phoneNumber =
+        "* Invalid Phone Number Format or  at least 7 digits ";
+    }
+    setErrors(errRecords);
+
+    if (Object.keys(errRecords).length > 0) {
+      setLoading(false);
+      return;
+    }
+    dispatch(editUser({ id: formData.id, updatedUser: formData }));
+    toast({ title: "User Updated Successfully!", className: "bg-green-400" });
+
+    clear();
+    toggleSheet();
+  };
+  const clear = () => {
+    setErrors({});
+    setFormData((_) => userState);
+    setLoading(false);
+  };
+  useEffect(() => {
+    setFormData({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      dob: user.dob,
+      address: {
+        city: user?.address?.city,
+        district: user.address.district,
+        province: user?.address.province,
+        country: user.address.country,
+      },
+    });
+  }, [user]);
+
   return (
     <div>
       <Sheet open={sheetOpen}>
         <SheetTrigger>
-          {/* <Button variant="secondary" onClick={toggleSheet}>
-            Edit
-          </Button> */}
           <span onClick={toggleSheet}>
             <Edit2
               size={20}
@@ -91,7 +118,7 @@ export default function EditUser({ user }: { user: IUser }) {
             />
           </span>
         </SheetTrigger>
-        <SheetContent>
+        <SheetContent className="overflow-y-auto overflow-x-hidden">
           <SheetHeader>
             <SheetTitle>Edit your user data.</SheetTitle>
             <SheetDescription>
