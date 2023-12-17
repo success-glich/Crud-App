@@ -29,8 +29,6 @@ const Home: React.FC = () => {
 
           <div className=" mb-5 border-l-orange-300 border-l-4 rounded-md hover:bg-[#1a2233]">
             <Link to="/profile">
-              {/* <span></span>
-               */}
               <Button> Go To Profile Page</Button>
             </Link>
           </div>
