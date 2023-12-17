@@ -1,4 +1,4 @@
-# My React App
+# Crud Application
 
 This is a React JS application that allows users to enter and manage profiles.
 
